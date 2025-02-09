@@ -2,9 +2,15 @@ import { HomeCarousel } from "@/components/shared/home/home-carousel";
 import { HomeCard } from "@/components/shared/home/home-card";
 import data from "@/lib/data";
 
-const fetcher = async (url: string) => {
+const fetcher = async (url: string, useLocal = false) => {
+  const baseUrl = useLocal
+    ? process.env.LOCAL_API_URL // Use local API URL if `useLocal` is true
+    : process.env.NEXT_PUBLIC_API_URL; // Otherwise, use the deployed API URL
+
+  const fullUrl = `${baseUrl}${url}`;
+
   try {
-    const res = await fetch(url);
+    const res = await fetch(fullUrl);
     if (!res.ok) {
       throw new Error(`Failed to fetch from ${url}: ${res.statusText}`);
     }
@@ -23,17 +29,17 @@ const toSlug = (text: string): string =>
     .replace(/^-+|-+$/g, "");
 
 export default async function Page() {
-  const categories = await fetcher(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories`
-  );
+  const useLocal = process.env.NODE_ENV === "development";
+
+  const categories = await fetcher("/categories", useLocal);
   const newArrivals = await fetcher(
-    `${process.env.NEXT_PUBLIC_API_URL}/products?tag=new-arrival&limit=4`
+    "/products?tag=new-arrival&limit=4",
+    useLocal
   );
-  const featureds = await fetcher(
-    `${process.env.NEXT_PUBLIC_API_URL}/products?tag=featured&limit=4`
-  );
+  const featureds = await fetcher("/products?tag=featured&limit=4", useLocal);
   const bestSellers = await fetcher(
-    `${process.env.NEXT_PUBLIC_API_URL}/products?tag=best-seller&limit=4`
+    "/products?tag=best-seller&limit=4",
+    useLocal
   );
 
   const cards = [
