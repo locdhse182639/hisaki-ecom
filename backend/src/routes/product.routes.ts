@@ -16,7 +16,7 @@ router.get("/categories", async (req: Request, res: Response) => {
   }
 });
 
-// Fetch products by tag
+// Fetch products for card
 router.get("/products", async (req, res) => {
   const { tag, limit = 4 } = req.query;
   try {
@@ -35,6 +35,23 @@ router.get("/products", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
+router.get("/products-by-tag", async (req, res) => {
+  const { tag, limit = 10 } = req.query;
+  try {
+    const products = await Product.find(
+      { tags: { $in: [tag] }, isPublished: true },
+      { name: 1, slug: 1, images: 1, price: 1, avgRating: 1 }
+    )
+      .sort({ createdAt: -1 })
+      .limit(Number(limit));
+
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch products." });
   }
 });
 

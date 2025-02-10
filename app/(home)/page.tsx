@@ -1,6 +1,8 @@
 import { HomeCarousel } from "@/components/shared/home/home-carousel";
 import { HomeCard } from "@/components/shared/home/home-card";
 import data from "@/lib/data";
+import { Card, CardContent } from "@/components/ui/card";
+import ProductSlider from "@/components/shared/product/product-slider";
 
 const fetcher = async (url: string, useLocal = false) => {
   const baseUrl = useLocal
@@ -41,6 +43,10 @@ export default async function Page() {
     "/products?tag=best-seller&limit=4",
     useLocal
   );
+  const todaysDeals = await fetcher(
+    `/products-by-tag?tag=todays-deal&limit=10`,
+    useLocal
+  );
 
   const cards = [
     {
@@ -72,8 +78,13 @@ export default async function Page() {
   return (
     <>
       <HomeCarousel items={data.carousels} />
-      <div>
+      <div className="md:p-4 md:space-y-4 bg-border">
         <HomeCard cards={cards} />
+        <Card className="w-full rounded-none">
+          <CardContent className="p-4 items-center gap-3">
+            <ProductSlider title={"Today's Deal"} products={todaysDeals}/>
+          </CardContent>
+        </Card>
       </div>
     </>
   );
