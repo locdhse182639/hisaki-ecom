@@ -4,24 +4,8 @@ import data from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductSlider from "@/components/shared/product/product-slider";
 
-const fetcher = async (url: string, useLocal = false) => {
-  const baseUrl = useLocal
-    ? process.env.LOCAL_API_URL // Use local API URL if `useLocal` is true
-    : process.env.NEXT_PUBLIC_API_URL; // Otherwise, use the deployed API URL
-
-  const fullUrl = `${baseUrl}${url}`;
-
-  try {
-    const res = await fetch(fullUrl);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch from ${url}: ${res.statusText}`);
-    }
-    return res.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+import { getCategories, getProductsByTag } from "@/lib/api/product";
+import BrowsingHistoryList from "@/components/shared/browsing-history-list";
 
 const toSlug = (text: string): string =>
   text
@@ -31,26 +15,12 @@ const toSlug = (text: string): string =>
     .replace(/^-+|-+$/g, "");
 
 export default async function Page() {
-  const useLocal = process.env.NODE_ENV === "development";
-
-  const categories = await fetcher("/categories", useLocal);
-  const newArrivals = await fetcher(
-    "/products?tag=new-arrival&limit=4",
-    useLocal
-  );
-  const featureds = await fetcher("/products?tag=featured&limit=4", useLocal);
-  const bestSellers = await fetcher(
-    "/products?tag=best-seller&limit=4",
-    useLocal
-  );
-  const todaysDeals = await fetcher(
-    `/products-by-tag?tag=todays-deal&limit=10`,
-    useLocal
-  );
-  const bestSellingProducts = await fetcher(
-    "/products-by-tag?tag=best-seller&limit=10",
-    useLocal
-  );
+  const categories = await getCategories();
+  const newArrivals = await getProductsByTag("new-arrival", 4);
+  const featureds = await getProductsByTag("featured", 4);
+  const bestSellers = await getProductsByTag("best-seller", 4);
+  const todaysDeals = await getProductsByTag("todays-deal", 10);
+  const bestSellingProducts = await getProductsByTag("best-seller", 10);
 
   const cards = [
     {
@@ -64,17 +34,29 @@ export default async function Page() {
     },
     {
       title: "Explore New Arrivals",
-      items: newArrivals,
+      items: newArrivals.map((product) => ({
+        name: product.name,
+        image: product.images[0] || "/placeholder.jpg",
+        href: `/product/${product.slug}`,
+      })),
       link: { text: "View All", href: "/search?tag=new-arrival" },
     },
     {
       title: "Discover Best Sellers",
-      items: bestSellers,
+      items: bestSellers.map((product) => ({
+        name: product.name,
+        image: product.images[0] || "/placeholder.jpg",
+        href: `/product/${product.slug}`,
+      })),
       link: { text: "View All", href: "/search?tag=best-seller" },
     },
     {
       title: "Featured Products",
-      items: featureds,
+      items: featureds.map((product) => ({
+        name: product.name,
+        image: product.images[0] || "/placeholder.jpg",
+        href: `/product/${product.slug}`,
+      })),
       link: { text: "Shop Now", href: "/search?tag=featured" },
     },
   ];
@@ -94,6 +76,10 @@ export default async function Page() {
             />
           </CardContent>
         </Card>
+      </div>
+
+      <div className="p-4 bg-background">
+        <BrowsingHistoryList />
       </div>
     </>
   );

@@ -9,7 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import ProductCard from "./product-card";
-import { Product } from "@/types/product";
+import { Product } from "@/features/store/types/product";
 
 
 

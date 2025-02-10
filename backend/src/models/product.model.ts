@@ -1,29 +1,10 @@
 import { Schema, model, Document } from "mongoose";
+import { IProductInput } from "../types";
 
-interface IRatingDistribution {
-  rating: number;
-  count: number;
-}
-
-interface IProduct extends Document {
-  name: string;
-  slug: string;
-  category: string;
-  images: string[];
-  brand: string;
-  description: string;
-  price: number;
-  listPrice: number;
-  countInStock: number;
-  tags: string[];
-  sizes: string[];
-  colors: string[];
-  avgRating: number;
-  numReviews: number;
-  numSales: number;
-  isPublished: boolean;
-  ratingDistribution: IRatingDistribution[];
-  reviews: string[]; // Array of ObjectId references to a Review collection
+export interface IProduct extends Document, IProductInput {
+  _id: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 const productSchema = new Schema<IProduct>(

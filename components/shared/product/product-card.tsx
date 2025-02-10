@@ -7,7 +7,7 @@ import Rating from "./rating";
 import { formatNumber } from "@/lib/utils";
 import ProductPrice from "./product-price";
 import ImageHover from "./image-hover";
-import { Product } from "@/types/product";
+import { Product } from "@/features/store/types/product";
 
 const ProductCard = ({
   product,

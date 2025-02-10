@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import Product from "../models/product.model";
+import Product, { IProduct } from "../models/product.model";
 
 const router = express.Router();
 
@@ -97,5 +97,49 @@ router.get("/products/related", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch related products" });
   }
 });
+
+router.get(
+  "/products/browsing-history",
+  async (req: Request, res: Response) => {
+    const listType = req.query.type || "history";
+    const productIdsParam = req.query.ids as string | undefined;
+    const categoriesParam = req.query.categories as string | undefined;
+
+    console.log("Received Query Params:", {
+      listType,
+      productIdsParam,
+      categoriesParam,
+    });
+
+    if (!productIdsParam || !categoriesParam) {
+      return res.status(400).json({ error: "Missing query parameters" });
+    }
+
+    const productIds = productIdsParam.split(",");
+    const categories = categoriesParam.split(",");
+
+    const filter =
+      listType === "history"
+        ? { _id: { $in: productIds } }
+        : { category: { $in: categories }, _id: { $nin: productIds } };
+
+    try {
+      const products: IProduct[] = await Product.find(filter);
+
+      if (listType === "history") {
+        products.sort(
+          (a, b) =>
+            productIds.indexOf(a._id.toString()) -
+            productIds.indexOf(b._id.toString())
+        );
+      }
+
+      res.json(products);
+    } catch (error) {
+      console.error("Failed to fetch browsing history products:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 
 export default router;
