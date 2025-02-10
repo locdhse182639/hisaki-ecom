@@ -47,6 +47,10 @@ export default async function Page() {
     `/products-by-tag?tag=todays-deal&limit=10`,
     useLocal
   );
+  const bestSellingProducts = await fetcher(
+    "/products-by-tag?tag=best-seller&limit=10",
+    useLocal
+  );
 
   const cards = [
     {
@@ -82,7 +86,12 @@ export default async function Page() {
         <HomeCard cards={cards} />
         <Card className="w-full rounded-none">
           <CardContent className="p-4 items-center gap-3">
-            <ProductSlider title={"Today's Deal"} products={todaysDeals}/>
+            <ProductSlider title={"Today's Deal"} products={todaysDeals} />
+            <ProductSlider
+              title="Best Selling Products"
+              products={bestSellingProducts}
+              hideDetails
+            />
           </CardContent>
         </Card>
       </div>
