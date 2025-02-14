@@ -7,18 +7,18 @@ export interface IUser extends Document
  password: string;
  skinType: string;
  role: string;
- emailVerified: boolean;
- paymentMethod: string;
- address:{
-  fullName: string;
-  street: string;
-  city: string;
-  province: string;
-  postalCode: string;
-  country: string;
-  phone: string;
+ emailVerified?: boolean;
+ paymentMethod?: string;
+ address?:{
+  fullName?: string;
+  street?: string;
+  city?: string;
+  province?: string;
+  postalCode?: string;
+  country?: string;
+  phone?: string;
  };
- ComparePassword(candidatePassword: string): Promise<boolean>;
+ ComparePassword(inputPassword: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>(
@@ -29,15 +29,15 @@ const userSchema = new Schema<IUser>(
     skinType: {type: String, required: true},
     role: {type: String, enum: ["User","Admin","Manager"]},
     emailVerified: {type: Boolean, default: false},
-    paymentMethod: {type: String, enum: ["VnPay", "Paypal"], required: true},
+    paymentMethod: {type: String, enum: ["VnPay", "Paypal"], default: ""},
     address: {
-      fullName: String,
-      street: String,
-      city: String,
-      province: String,
-      postalCode: String,
-      country: String,
-      phone: String,
+      fullName: { type: String, default: "" },
+      street: { type: String, default: "" },
+      city: { type: String, default: "" },
+      province: { type: String, default: "" },
+      postalCode: { type: String, default: "" },
+      country: { type: String, default: "" },
+      phone: { type: String, default: "" },
     },
   },
   {timestamps: true}
