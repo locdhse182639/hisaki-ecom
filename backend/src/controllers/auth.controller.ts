@@ -1,62 +1,56 @@
-import User from "../models/user.model"
-import {Request, Response} from "express"
+import { Request, Response } from "express";
+import User from "../models/user.model";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt"; 
+import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
-const JWT_SECRET = process.env.JWT_SECRET || "thisisjwtsecret123"
+dotenv.config();
+//Tao token cho user
+const generateToken = (userId: string) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
+    expiresIn: "7d",
+  });
+};
+//Register o day
+export const register = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password, role, skinType, paymentMethod, address } = req.body;
 
-export const register = async (req: Request, res: Response)=> {
-    try{
-    const { name, email, password, role, skinType, paymentMethod, address} = req.body;
-    
-    //ktra email xem ton tai chua?
-    const existEmail = await User.findOne({email});
-    if (existEmail) 
-        return res.status(400).json({error:"Email existed !"});
-    const hashedPassword = await bcrypt.hash(password, 10);
-    //tao user 
-    const newUser = new User({
-        name,
-        email,
-        password: hashedPassword,
-        role,
-        skinType,
-        paymentMethod: paymentMethod || {},
-        address: address || {},
-    });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const newUser = new User({ name, email, password, role, skinType, paymentMethod, address });
     await newUser.save();
-    res.status(201).json({message: "User registerd successfully"})
+
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Server error", error });
   }
 };
+//Login o day
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
 
-export const login = async (req:Request , res:Response)=>
-{
-    try{
-    const {inputEmail, inputPassword} = req.body;
-    const userMatch = await User.findOne ({email: inputEmail}).select("+password");
-    
-    if (!userMatch)
-        return res.status(400).json({error: "Invalid email or password !"});
-    const passMatch = await bcrypt.compare(inputPassword, userMatch.password)
-
-    if (!passMatch)
-        return res.status(400).json({error:"Invalid email or password !"});
-
-    //tao token cho account
-    const token = jwt.sign({id: userMatch._id, role: userMatch.role}, JWT_SECRET, {expiresIn: "7d"});
-    res.json({
-        token,
-        user: {
-          id: userMatch._id,
-          name: userMatch.name,
-          email: userMatch.email,
-          role: userMatch.role,
-          skinType: userMatch.skinType
-        }
-      });      
-    }catch(error) {
-        res.status(500).json({error: "Internal server error"});
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
     }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = generateToken(user.id);
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+//Logout o day
+export const logout = async (_req: Request, res: Response) => {
+  res.json({ message: "User logged out successfully" });
 };
