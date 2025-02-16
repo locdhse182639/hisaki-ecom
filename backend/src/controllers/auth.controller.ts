@@ -1,30 +1,26 @@
 import { Request, Response } from "express";
-import User from "../models/user.model";
-import jwt from "jsonwebtoken";
+import User, { userStatus } from "../models/user.model";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-
+import { generateToken } from "../utils/auth.utils";
 dotenv.config();
-//Tao token cho user
-const generateToken = (userId: string) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
-    expiresIn: "7d",
-  });
-};
 //Register o day
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role, skinType, paymentMethod, address } = req.body;
+    const { name, email, password, userStatus, role, skinType, paymentMethod, address } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
     }
-
-    const newUser = new User({ name, email, password, role, skinType, paymentMethod, address });
+    
+    const newUser = new User({ name, email, password, userStatus: userStatus || "Active", role, skinType, paymentMethod, address });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role, userStatus: newUser.userStatus },
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
@@ -45,7 +41,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = generateToken(user.id);
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, userStatus: user.userStatus } });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

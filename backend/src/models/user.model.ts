@@ -4,11 +4,13 @@ import bcrypt from "bcrypt";
 export const Roles = ["User", "Staff", "Manager"] as const;
 export const PaymentMethods = ["VnPay", "Paypal"] as const;
 export const SkinTypes = ["Normal skin", "Dry skin", "Oily skin", "Combination skin", "Sensitive skin"] as const;
+export const userStatus = ["Active", "Inactive", "Pending"] as const; 
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  userStatus: string;
   role: string;
   skinType: string;
   emailVerified: boolean;
@@ -31,6 +33,7 @@ const userSchema = new Schema<IUser>(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    userStatus: {type: String, default: "Active"},
     role: { type: String, enum: Roles, default: "User" },
     skinType: { type: String, enum: SkinTypes, required: true },
     emailVerified: { type: Boolean, default: false },

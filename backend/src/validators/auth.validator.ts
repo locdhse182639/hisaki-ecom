@@ -1,11 +1,12 @@
 import { z } from "zod";
-import { Roles, SkinTypes, PaymentMethods } from "../models/user.model";
+import { Roles, SkinTypes, PaymentMethods, userStatus } from "../models/user.model";
 
 // Schema Register
 export const RegisterSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email format"),
     password: z.string().min(6, "Password must be at least 6 characters").max(15, "Password cannot exceed 15 characters"),
+    userStatus: z.enum(userStatus).default("Active"),
     role: z.enum(Roles).default("User"),
     skinType: z.enum(SkinTypes, { message: "Invalid skin type" }),
     paymentMethod: z.enum(PaymentMethods).default("VnPay"),
