@@ -105,12 +105,6 @@ router.get(
     const productIdsParam = req.query.ids as string | undefined;
     const categoriesParam = req.query.categories as string | undefined;
 
-    console.log("Received Query Params:", {
-      listType,
-      productIdsParam,
-      categoriesParam,
-    });
-
     if (!productIdsParam || !categoriesParam) {
       return res.status(400).json({ error: "Missing query parameters" });
     }

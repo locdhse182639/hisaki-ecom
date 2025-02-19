@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { formatNumberWithDecimal } from "../utils";
+import { formatNumberWithDecimal } from "../utils/utils";
 
 const Price = (field: string) =>
   z

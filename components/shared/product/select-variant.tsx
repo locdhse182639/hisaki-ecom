@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Product } from "@/features/store/types/product";
+import { Product } from "@/features/redux/types/product";
 import Link from "next/link";
 
 export default function SelectVariant({

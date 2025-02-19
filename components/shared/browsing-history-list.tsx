@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/features/store";
+import { RootState } from "@/features/redux/store";
 import useAppDispatch from "@/features/hooks/useAppDispatch";
-import { fetchBrowsingHistoryProducts } from "@/features/store/thunks/browsingHistoryThunks";
+import { fetchBrowsingHistoryProducts } from "@/features/redux/thunks/browsingHistoryThunks";
 import ProductSlider from "./product/product-slider";
 import { Separator } from "../ui/separator";
 

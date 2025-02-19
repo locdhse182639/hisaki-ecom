@@ -18,7 +18,6 @@ const browsingHistorySlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<BrowsingHistoryItem>) {
-      console.log("addItem Reducer Called:", action.payload);
       const index = state.products.findIndex(
         (product) => product.id === action.payload.id
       );

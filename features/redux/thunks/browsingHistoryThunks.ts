@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axiosInstance from "@/lib/api/axiosConfig";
+import axiosInstance from "@/features/api/axiosConfig";
 
 export const fetchBrowsingHistoryProducts = createAsyncThunk(
   "browsingHistory/fetchProducts",
@@ -21,7 +21,6 @@ export const fetchBrowsingHistoryProducts = createAsyncThunk(
       const response = await axiosInstance.get(
         `/products/browsing-history?${queryParams}`
       );
-      console.log("Full Axios response:", response); 
       return response.data || response; 
     } catch (error) {
       console.error("Error in fetchBrowsingHistoryProducts:", error);

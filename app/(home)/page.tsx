@@ -4,7 +4,7 @@ import data from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductSlider from "@/components/shared/product/product-slider";
 
-import { getCategories, getProductsByTag } from "@/lib/api/product";
+import { getCategories, getProductsByTag } from "@/features/api/product";
 import BrowsingHistoryList from "@/components/shared/browsing-history-list";
 
 const toSlug = (text: string): string =>
@@ -26,7 +26,7 @@ export default async function Page() {
     {
       title: "Categories to explore",
       link: { text: "See More", href: "/search" },
-      items: categories.map((category: string) => ({
+      items: categories?.map((category: string) => ({
         name: category,
         image: `/images/${toSlug(category)}.jpg`,
         href: `/search?category=${category}`,

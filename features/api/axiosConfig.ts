@@ -18,15 +18,14 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    // Ensure the data is returned unless response.data is undefined
-    return response.data !== undefined ? response.data : response;
-  },
-  (error) => {
-    console.error("Axios error:", error.response || error.message);
-    return Promise.reject(error);
-  }
-);
-
+// axiosInstance.interceptors.response.use(
+//   (response) => {
+//     console.log("Interceptor Response:", response);
+//     return response.data; // Ensure we always return response.data
+//   },
+//   (error) => {
+//     console.error("Axios error:", error.response || error.message);
+//     return Promise.reject(error);
+//   }
+// );
 export default axiosInstance;

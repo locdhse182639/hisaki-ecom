@@ -14,5 +14,5 @@ export default async function RootLayout({
       <main className='flex-1 flex flex-col p-4'>{children}</main>
       <Footer />
     </div>
-  )
+  ) 
 }

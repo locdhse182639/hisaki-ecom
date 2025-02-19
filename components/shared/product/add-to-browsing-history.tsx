@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import useAppDispatch from "@/features/hooks/useAppDispatch";
-import { addItem } from "@/features/store/slices/browsingHistorySlice";
+import { addItem } from "@/features/redux/slices/browsingHistorySlice";
 
 export default function AddToBrowsingHistory({
   id,
@@ -14,7 +14,6 @@ export default function AddToBrowsingHistory({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("Dispatching addItem:", { id, category });
     dispatch(addItem({ id, category }));
   }, [id, category, dispatch]);
 

@@ -1,9 +1,10 @@
 // import fetcher from "./fetcher";
 import axiosInstance from "./axiosConfig";
-import { Product } from "@/features/store/types/product";
+import { Product } from "@/features/redux/types/product";
 
 export const getCategories = async (): Promise<string[]> => {
-  return axiosInstance.get("/categories");
+  const response = await axiosInstance.get("/categories");
+  return response.data
 };
 
 
@@ -11,13 +12,15 @@ export const getProductsByTag = async (
   tag: string,
   limit = 10
 ): Promise<Product[]> => {
-  return axiosInstance.get("/products-by-tag", {
+  const response = await axiosInstance.get("/products-by-tag", {
     params: { tag, limit },
   });
+  return response.data
 };
 
 export const getProductBySlug = async (slug: string) : Promise<Product> => {
-  return axiosInstance.get(`/product/${slug}`);
+  const response = await axiosInstance.get(`/product/${slug}`);
+  return response.data
 };
 
 export const getRelatedProductsByCategory = async (
@@ -26,7 +29,7 @@ export const getRelatedProductsByCategory = async (
   limit = 9,
   page = 1
 ) => {
-  return axiosInstance.get(`/products/related`, {
+  const response = await axiosInstance.get(`/products/related`, {
     params: {
       category,
       productId,
@@ -34,4 +37,5 @@ export const getRelatedProductsByCategory = async (
       page,
     },
   });
+  return response.data
 };
