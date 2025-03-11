@@ -5,6 +5,8 @@ import { connectToDatabase } from "./db";
 import productRoutes from "./routes/product.routes";
 import cartRoutes from "./routes/cart.routes";
 import authRoutes from "./routes/auth.routes"
+import categoryRoutes from "./routes/category.routes";
+import commentRoutes from "./routes/comment.routes";
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use("/api", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/comments", commentRoutes);
 
 const PORT = process.env.PORT || 5000;
 

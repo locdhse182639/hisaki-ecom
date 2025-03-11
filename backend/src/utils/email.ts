@@ -15,6 +15,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   try {
     const frontendURL = process.env.FRONTEND_URL || "http://localhost:3000";
     const verificationLink = `${frontendURL}/verify-email?token=${token}`;
+    
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
