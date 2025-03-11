@@ -13,9 +13,44 @@ import { connectToDatabase } from "../db";
 const router = express.Router();
 
 /**
- * @route   GET /api/categories
- * @desc    Get all categories with optional filtering
- * @access  Public
+ * @swagger
+ * /api/categories:
+ *   get:
+ *     summary: Get all categories with optional filtering
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *         description: Filter by active status
+ *       - in: query
+ *         name: parentCategory
+ *         schema:
+ *           type: string
+ *         description: Parent category ID to filter by
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term to filter by category name
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: List of categories
+ *       500:
+ *         description: Server error
  */
 router.get("/", async (req, res) => {
   try {

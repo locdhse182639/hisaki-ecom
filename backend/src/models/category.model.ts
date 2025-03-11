@@ -8,14 +8,16 @@ const CategorySchema = new mongoose.Schema(
       unique: true,
       trim: true,
       minlength: [2, "Category name must be at least 2 characters"],
-      maxlength: [50, "Category name cannot exceed 50 characters"]
+      maxlength: [50, "Category name cannot exceed 50 characters"],
+      index: true
     },
     slug: { 
       type: String, 
       required: true, 
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
+      index: true
     },
     description: { 
       type: String,
@@ -39,8 +41,6 @@ const CategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Create index for faster queries
-CategorySchema.index({ name: 1 });
-CategorySchema.index({ slug: 1 });
+
 
 export default mongoose.model("Category", CategorySchema); 

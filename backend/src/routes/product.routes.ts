@@ -3,7 +3,18 @@ import Product, { IProduct } from "../models/product.model";
 
 const router = express.Router();
 
-// Fetch all categories
+/**
+ * @swagger
+ * /api/products/categories:
+ *   get:
+ *     summary: Fetch all product categories
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: List of product categories
+ *       500:
+ *         description: Failed to fetch categories
+ */
 router.get("/categories", async (req: Request, res: Response) => {
   try {
     const categories = await Product.find({ isPublished: true }).distinct(
@@ -16,7 +27,30 @@ router.get("/categories", async (req: Request, res: Response) => {
   }
 });
 
-// Fetch products for card
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Fetch products for card
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: tag
+ *         schema:
+ *           type: string
+ *         description: Tag to filter products by
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 4
+ *         description: Number of products to return
+ *     responses:
+ *       200:
+ *         description: List of products
+ *       500:
+ *         description: Failed to fetch products for card
+ */
 router.get("/products", async (req, res) => {
   const { tag, limit = 4 } = req.query;
   try {

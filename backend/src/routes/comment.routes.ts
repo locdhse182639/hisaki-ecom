@@ -14,11 +14,6 @@ import mongoose from "mongoose";
 
 const router = express.Router();
 
-/**
- * @route   GET /api/comments
- * @desc    Get comments with optional filtering
- * @access  Public
- */
 router.get("/", async (req, res) => {
   try {
     await connectToDatabase();
@@ -119,11 +114,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/comments/:id
- * @desc    Get a comment by ID
- * @access  Public
- */
 router.get("/:id", async (req, res) => {
   try {
     await connectToDatabase();
@@ -157,11 +147,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/**
- * @route   POST /api/comments
- * @desc    Create a new comment
- * @access  Private
- */
 router.post(
   "/",
   authenticateUser,

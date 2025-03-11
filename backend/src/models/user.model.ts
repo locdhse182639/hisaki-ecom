@@ -5,6 +5,9 @@ export interface IUser extends Document, IUserInput {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+  suspended: boolean;
+  suspensionEndDate?: Date;
+  suspensionReason?: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -15,7 +18,10 @@ const userSchema = new Schema<IUser>(
     password: { type: String },
     image: { type: String },
     emailVerified: { type: Boolean, default: false },
-    verificationToken: { type: String, default: undefined }, 
+    verificationToken: { type: String, default: undefined },
+    suspended: { type: Boolean, required: true, default: false },
+    suspensionEndDate: { type: Date },
+    suspensionReason: { type: String },
   },
   {
     timestamps: true,

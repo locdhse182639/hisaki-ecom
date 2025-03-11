@@ -25,7 +25,10 @@ export const UserInputSchema = z.object({
       country: z.string().min(1, 'Country is required'),
       phone: z.string().min(1, 'Phone number is required'),
     }),
-    verificationToken: z.string().optional(), // 🔹 Make it optional
+    verificationToken: z.string().optional(),
+    suspended: z.boolean().default(false),
+    suspensionEndDate: z.date().optional(),
+    suspensionReason: z.string().optional(),
   })
 
   export const UserSignInSchema = z.object({

@@ -16,8 +16,29 @@ import { sendVerificationEmail } from "../utils/email";
 const router = express.Router();
 
 /**
- * @route   POST /api/auth/register
- * @desc    Register a new user
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Email already exists
  */
 router.post("/register", async (req, res) => {
   try {
@@ -73,6 +94,29 @@ router.post("/register", async (req, res) => {
  * @route   POST /api/auth/login
  * @desc    Authenticate user & get token
  */
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Authenticate user & get token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Invalid credentials
+ */
 router.post("/login", async (req, res) => {
   try {
     // Validate request body
@@ -118,6 +162,21 @@ router.post("/login", async (req, res) => {
  * @route   GET /api/auth/profile
  * @desc    Get user profile (Protected)
  */
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   get:
+ *     summary: Get user profile (Protected)
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile data
+ *       401:
+ *         description: Unauthorized
+ */
+
 router.get(
   "/profile",
   authenticateUser,
@@ -136,6 +195,25 @@ router.get(
   }
 );
 
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     summary: Verify user's email
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Verification token sent to email
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
 router.get("/verify-email", async (req, res) => {
   try {
     const { token } = req.query;

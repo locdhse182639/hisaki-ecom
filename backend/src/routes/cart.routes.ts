@@ -6,9 +6,20 @@ import { calcDeliveryDateAndPrice } from "../utils/utils";
 const router = express.Router();
 
 /**
- * @route   GET /api/cart
- * @desc    Fetch the user's cart
- * @access  Private
+ * @swagger
+ * /api/cart:
+ *   get:
+ *     summary: Fetch the user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User's cart
+ *       404:
+ *         description: Cart not found
+ *       500:
+ *         description: Server error
  */
 router.get("/", authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
@@ -28,9 +39,34 @@ router.get("/", authenticateUser, async (req: AuthRequest, res: Response) => {
 });
 
 /**
- * @route   POST /api/cart
- * @desc    Add an item to the user's cart
- * @access  Private
+ * @swagger
+ * /api/cart:
+ *   post:
+ *     summary: Add an item to the user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               product:
+ *                 type: string
+ *                 description: Product ID
+ *               name:
+ *                 type: string
+ *                 description: Product name
+ *               slug:
+ *                 type: string
+ *                 description: Product slug
+ *     responses:
+ *       200:
+ *         description: Item added to cart
+ *       500:
+ *         description: Server error
  */
 router.post("/", authenticateUser, async (req: AuthRequest, res: Response) => {
   try {
