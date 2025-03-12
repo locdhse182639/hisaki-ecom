@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes"
 import categoryRoutes from "./routes/category.routes";
 import commentRoutes from "./routes/comment.routes";
 import userManagerRoutes from "./routes/userManager.routes";
+import feedbackRoutes from "./routes/feedback.routes";
 import { swaggerUi, specs } from "./swagger";
 
 // Load environment variables from .env file
@@ -29,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/user-manager", userManagerRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 const PORT = process.env.PORT || 5000;
 
